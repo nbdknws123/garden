@@ -205,6 +205,7 @@ body::before {
 ========================================= */
 
 .enter-button {
+   
     position: relative;
 
     padding: 18px 45px;
@@ -222,6 +223,11 @@ body::before {
     letter-spacing: 4px;
 
     cursor: pointer;
+   
+   text-decoration: none;
+display: inline-flex;
+align-items: center;
+justify-content: center;
 
     transition:
         background 0.35s ease,
