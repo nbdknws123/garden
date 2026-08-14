@@ -59,26 +59,34 @@ async function loadCharacters() {
             await fetch(SHEET_URL);
 
         if (!response.ok) {
+
             throw new Error(
                 "Không thể kết nối Google Sheet."
             );
+
         }
+
 
         const text =
             await response.text();
 
+
         characters =
             parseTSV(text);
+
 
         createCategories();
 
         renderCharacters();
 
+
     } catch (error) {
 
         console.error(error);
 
+
         grid.innerHTML = `
+
             <div class="loading-card error-card">
 
                 <div class="loading-symbol">
@@ -94,7 +102,9 @@ async function loadCharacters() {
                 </small>
 
             </div>
+
         `;
+
 
         characterCount.textContent =
             "KHÔNG CÓ DỮ LIỆU";
@@ -118,9 +128,13 @@ function parseTSV(text) {
                 row.split("\t")
             );
 
+
     if (rows.length < 2) {
+
         return [];
+
     }
+
 
     const headers =
         rows[0].map(
@@ -137,6 +151,7 @@ function parseTSV(text) {
 
             const character = {};
 
+
             headers.forEach(
                 (header, index) => {
 
@@ -145,6 +160,7 @@ function parseTSV(text) {
 
                 }
             );
+
 
             return character;
 
@@ -167,7 +183,10 @@ function parseTSV(text) {
    GET VALUE
 ================================================== */
 
-function getValue(character, ...keys) {
+function getValue(
+    character,
+    ...keys
+) {
 
     for (const key of keys) {
 
@@ -181,6 +200,7 @@ function getValue(character, ...keys) {
         }
 
     }
+
 
     return "";
 
@@ -242,6 +262,25 @@ function getDescription(character) {
 
 
 /* ==================================================
+   ROLEPLAY LINK
+================================================== */
+
+function getLink(character) {
+
+    return getValue(
+        character,
+        "link",
+        "url",
+        "char link",
+        "character link",
+        "roleplay",
+        "roleplay link"
+    );
+
+}
+
+
+/* ==================================================
    TAGS
 ================================================== */
 
@@ -257,13 +296,20 @@ function getTags(character) {
             "categories"
         );
 
+
     if (!value) {
+
         return [];
+
     }
+
 
     return value
         .split(",")
-        .map(tag => tag.trim())
+        .map(
+            tag =>
+                tag.trim()
+        )
         .filter(Boolean);
 
 }
@@ -275,17 +321,24 @@ function getTags(character) {
 
 function createCategories() {
 
-    const allTags = new Set();
+    const allTags =
+        new Set();
 
-    characters.forEach(character => {
 
-        getTags(character).forEach(tag => {
+    characters.forEach(
+        character => {
 
-            allTags.add(tag);
+            getTags(character)
+                .forEach(
+                    tag => {
 
-        });
+                        allTags.add(tag);
 
-    });
+                    }
+                );
+
+        }
+    );
 
 
     categoryFilters.innerHTML = `
@@ -300,56 +353,73 @@ function createCategories() {
     `;
 
 
-    allTags.forEach(tag => {
+    allTags.forEach(
+        tag => {
 
-        const button =
-            document.createElement("button");
+            const button =
+                document.createElement(
+                    "button"
+                );
 
-        button.className =
-            "category-button";
 
-        button.dataset.category =
-            tag;
+            button.className =
+                "category-button";
 
-        button.textContent =
-            tag.toUpperCase();
 
-        categoryFilters.appendChild(button);
+            button.dataset.category =
+                tag;
 
-    });
+
+            button.textContent =
+                tag.toUpperCase();
+
+
+            categoryFilters
+                .appendChild(button);
+
+        }
+    );
 
 
     categoryFilters
-        .querySelectorAll(".category-button")
-        .forEach(button => {
+        .querySelectorAll(
+            ".category-button"
+        )
+        .forEach(
+            button => {
 
-            button.addEventListener(
-                "click",
-                () => {
+                button.addEventListener(
+                    "click",
+                    () => {
 
-                    categoryFilters
-                        .querySelectorAll(
-                            ".category-button"
-                        )
-                        .forEach(item =>
-                            item.classList.remove(
-                                "active"
+                        categoryFilters
+                            .querySelectorAll(
+                                ".category-button"
                             )
+                            .forEach(
+                                item =>
+                                    item.classList.remove(
+                                        "active"
+                                    )
+                            );
+
+
+                        button.classList.add(
+                            "active"
                         );
 
-                    button.classList.add(
-                        "active"
-                    );
 
-                    currentCategory =
-                        button.dataset.category;
+                        currentCategory =
+                            button.dataset.category;
 
-                    renderCharacters();
 
-                }
-            );
+                        renderCharacters();
 
-        });
+                    }
+                );
+
+            }
+        );
 
 }
 
@@ -373,9 +443,11 @@ function getFilteredCharacters() {
                 getName(character)
                     .toLowerCase();
 
+
             const description =
                 getDescription(character)
                     .toLowerCase();
+
 
             const tags =
                 getTags(character)
@@ -459,6 +531,7 @@ function renderCharacters() {
                     character
                 );
 
+
             grid.appendChild(card);
 
         }
@@ -474,7 +547,10 @@ function renderCharacters() {
 function createCharacterCard(character) {
 
     const card =
-        document.createElement("article");
+        document.createElement(
+            "article"
+        );
+
 
     card.className =
         "character-card";
@@ -483,14 +559,21 @@ function createCharacterCard(character) {
     const image =
         getImage(character);
 
+
     const name =
         getName(character);
+
 
     const description =
         getDescription(character);
 
+
     const tags =
         getTags(character);
+
+
+    const link =
+        getLink(character);
 
 
     card.innerHTML = `
@@ -555,6 +638,7 @@ function createCharacterCard(character) {
 
             <button
                 class="character-open"
+                type="button"
             >
                 XEM NHÂN VẬT
                 <span>→</span>
@@ -565,18 +649,49 @@ function createCharacterCard(character) {
     `;
 
 
-    card
-        .querySelector(".character-open")
-        .addEventListener(
-            "click",
-            () => {
+    const openButton =
+        card.querySelector(
+            ".character-open"
+        );
 
-                openCharacter(
-                    character
+
+    /* ==================================================
+       BUTTON ACTION
+    ================================================== */
+
+    openButton.addEventListener(
+        "click",
+        () => {
+
+            /*
+             * Nếu char có link:
+             * mở trang roleplay.
+             */
+
+            if (link) {
+
+                window.open(
+                    link,
+                    "_blank",
+                    "noopener,noreferrer"
                 );
 
+                return;
+
             }
-        );
+
+
+            /*
+             * Nếu char chưa có link:
+             * vẫn mở modal như cũ.
+             */
+
+            openCharacter(
+                character
+            );
+
+        }
+    );
 
 
     return card;
@@ -593,14 +708,21 @@ function openCharacter(character) {
     const image =
         getImage(character);
 
+
     const name =
         getName(character);
+
 
     const description =
         getDescription(character);
 
+
     const tags =
         getTags(character);
+
+
+    const link =
+        getLink(character);
 
 
     modalContent.innerHTML = `
@@ -651,12 +773,44 @@ function openCharacter(character) {
 
             </div>
 
+
+            ${
+                link
+                    ? `
+                        <div
+                            style="
+                                margin-top: 30px;
+                            "
+                        >
+
+                            <a
+                                href="${escapeHTML(link)}"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="character-open"
+                                style="
+                                    display: inline-flex;
+                                    align-items: center;
+                                    gap: 8px;
+                                    text-decoration: none;
+                                "
+                            >
+                                DẠO CÙNG NHÂN VẬT
+                                <span>→</span>
+                            </a>
+
+                        </div>
+                    `
+                    : ""
+            }
+
         </div>
 
     `;
 
 
     modal.classList.add("show");
+
 
     document.body.style.overflow =
         "hidden";
@@ -670,7 +824,10 @@ function openCharacter(character) {
 
 function closeCharacterModal() {
 
-    modal.classList.remove("show");
+    modal.classList.remove(
+        "show"
+    );
+
 
     document.body.style.overflow =
         "";
@@ -685,7 +842,9 @@ closeModal.addEventListener(
 
 
 modal
-    .querySelector(".modal-overlay")
+    .querySelector(
+        ".modal-overlay"
+    )
     .addEventListener(
         "click",
         closeCharacterModal
@@ -709,22 +868,27 @@ searchInput.addEventListener(
 function escapeHTML(value) {
 
     return String(value)
+
         .replace(
             /&/g,
             "&amp;"
         )
+
         .replace(
             /</g,
             "&lt;"
         )
+
         .replace(
             />/g,
             "&gt;"
         )
+
         .replace(
             /"/g,
             "&quot;"
         )
+
         .replace(
             /'/g,
             "&#039;"
