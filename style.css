@@ -1785,3 +1785,139 @@ body:not(.garden-page) {
         font-size: 42px;
     }
 }
+/* ==================================================
+   CHARACTER LINK
+   VỊ TRÍ: GÓC DƯỚI BÊN PHẢI POPUP
+================================================== */
+
+.character-link-area {
+    width: 100%;
+
+    display: flex;
+    justify-content: flex-end;
+
+    margin-top: 30px;
+}
+
+
+/* ==================================================
+   LINK BOX
+================================================== */
+
+.character-link-box {
+    width: 150px;
+    height: 54px;
+
+    box-sizing: border-box;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 17px;
+
+    text-decoration: none;
+
+    border: 1px solid
+        rgba(185, 154, 99, 0.55);
+
+    background:
+        rgba(91, 13, 25, 0.75);
+
+    color:
+        #d8b86a;
+
+    font-family: inherit;
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+    letter-spacing: 0.2em;
+
+    transition:
+        all 0.3s ease;
+}
+
+
+/* ==================================================
+   HOVER
+================================================== */
+
+.character-link-box:hover {
+
+    border-color:
+        rgba(216, 184, 106, 0.95);
+
+    background:
+        rgba(116, 20, 35, 0.9);
+
+    box-shadow:
+        0 8px 25px
+        rgba(0, 0, 0, 0.25);
+
+    transform:
+        translateY(-2px);
+
+}
+
+
+/* ==================================================
+   LINK TEXT
+================================================== */
+
+.character-link-title {
+    white-space: nowrap;
+}
+
+
+/* ==================================================
+   ARROW
+================================================== */
+
+.character-link-arrow {
+
+    font-size: 18px;
+
+    line-height: 1;
+
+    transition:
+        transform 0.3s ease;
+
+}
+
+
+.character-link-box:hover
+.character-link-arrow {
+
+    transform:
+        translateX(5px);
+
+}
+
+
+/* ==================================================
+   MOBILE
+================================================== */
+
+@media (max-width: 600px) {
+
+    .character-link-area {
+
+        margin-top: 24px;
+
+    }
+
+
+    .character-link-box {
+
+        width: 135px;
+
+        height: 50px;
+
+        padding:
+            0 14px;
+
+    }
+
+}
