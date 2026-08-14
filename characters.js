@@ -82,7 +82,10 @@ async function loadCharacters() {
 
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            "Lỗi tải Google Sheet:",
+            error
+        );
 
 
         grid.innerHTML = `
@@ -244,7 +247,7 @@ function getName(character) {
 
 
 /* ==================================================
-   DESCRIPTION
+   DESCRIPTION / PLOT
 ================================================== */
 
 function getDescription(character) {
@@ -255,7 +258,9 @@ function getDescription(character) {
         "mô tả",
         "desc",
         "bio",
-        "giới thiệu"
+        "giới thiệu",
+        "plot",
+        "nội dung"
     );
 
 }
@@ -484,7 +489,7 @@ function getFilteredCharacters() {
 
 
 /* ==================================================
-   RENDER
+   RENDER CHARACTERS
 ================================================== */
 
 function renderCharacters() {
@@ -572,10 +577,6 @@ function createCharacterCard(character) {
         getTags(character);
 
 
-    const link =
-        getLink(character);
-
-
     card.innerHTML = `
 
         <div class="character-image">
@@ -649,32 +650,21 @@ function createCharacterCard(character) {
     `;
 
 
+    /* ==================================================
+       IMPORTANT:
+       BUTTON CHỈ MỞ MODAL
+       KHÔNG MỞ LINK
+    ================================================== */
+
     const openButton =
         card.querySelector(
             ".character-open"
         );
 
 
-    /* ==================================================
-       OPEN CHARACTER
-    ================================================== */
-
     openButton.addEventListener(
         "click",
         () => {
-
-            if (link) {
-
-                window.open(
-                    link,
-                    "_blank",
-                    "noopener,noreferrer"
-                );
-
-                return;
-
-            }
-
 
             openCharacter(
                 character
@@ -690,7 +680,7 @@ function createCharacterCard(character) {
 
 
 /* ==================================================
-   MODAL
+   OPEN CHARACTER MODAL
 ================================================== */
 
 function openCharacter(character) {
@@ -738,7 +728,9 @@ function openCharacter(character) {
                     tags
                         .map(
                             tag =>
-                                `<span>${escapeHTML(tag)}</span>`
+                                `<span>
+                                    ${escapeHTML(tag)}
+                                </span>`
                         )
                         .join("")
                 }
@@ -758,7 +750,10 @@ function openCharacter(character) {
                         ? escapeHTML(
                             description
                         )
-                        : "Chưa có mô tả."
+                        : `
+                            Chưa có thông tin
+                            về nhân vật này.
+                        `
                 }
 
             </div>
@@ -767,23 +762,13 @@ function openCharacter(character) {
             ${
                 link
                     ? `
-                        <div
-                            style="
-                                margin-top: 30px;
-                            "
-                        >
+                        <div class="character-link-wrapper">
 
                             <a
                                 href="${escapeHTML(link)}"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                class="character-open"
-                                style="
-                                    display: inline-flex;
-                                    align-items: center;
-                                    gap: 8px;
-                                    text-decoration: none;
-                                "
+                                class="character-open character-roleplay-link"
                             >
                                 DẠO CÙNG NHÂN VẬT
                                 <span>→</span>
@@ -791,7 +776,12 @@ function openCharacter(character) {
 
                         </div>
                     `
-                    : ""
+                    : `
+                        <div class="character-no-link">
+                            Nhân vật này chưa có
+                            liên kết roleplay.
+                        </div>
+                    `
             }
 
         </div>
@@ -799,7 +789,9 @@ function openCharacter(character) {
     `;
 
 
-    modal.classList.add("show");
+    modal.classList.add(
+        "show"
+    );
 
 
     document.body.style.overflow =
