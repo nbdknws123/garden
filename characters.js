@@ -1,6 +1,6 @@
 /* ==================================================
    VƯỜN HOA HỒNG
-   GOOGLE SHEET CHARACTER DATABASE
+   CHARACTER DATABASE
 ================================================== */
 
 
@@ -77,7 +77,7 @@ async function loadCharacters() {
     } catch (error) {
 
         console.error(
-            "Lỗi tải Google Sheet:",
+            "Lỗi Google Sheet:",
             error
         );
 
@@ -123,9 +123,11 @@ function parseTSV(text) {
                 row.split("\t")
             );
 
+
     if (rows.length < 2) {
         return [];
     }
+
 
     const headers =
         rows[0].map(
@@ -135,11 +137,13 @@ function parseTSV(text) {
                     .toLowerCase()
         );
 
+
     return rows
         .slice(1)
         .map(row => {
 
             const character = {};
+
 
             headers.forEach(
                 (header, index) => {
@@ -149,6 +153,7 @@ function parseTSV(text) {
 
                 }
             );
+
 
             return character;
 
@@ -251,7 +256,7 @@ function getDescription(character) {
 
 
 /* ==================================================
-   ROLEPLAY LINK
+   LINK
 ================================================== */
 
 function getLink(character) {
@@ -265,6 +270,64 @@ function getLink(character) {
         "roleplay",
         "roleplay link"
     );
+
+}
+
+
+/* ==================================================
+   FIX LINK
+================================================== */
+
+function normalizeLink(link) {
+
+    if (!link) {
+        return "";
+    }
+
+
+    link =
+        String(link)
+            .trim();
+
+
+    /*
+       Nếu link đã là URL đầy đủ
+       thì giữ nguyên.
+    */
+
+    if (
+        link.startsWith("https://") ||
+        link.startsWith("http://")
+    ) {
+
+        return link;
+
+    }
+
+
+    /*
+       Nếu người dùng lỡ nhập
+       www.example.com
+    */
+
+    if (
+        link.startsWith("www.")
+    ) {
+
+        return "https://" + link;
+
+    }
+
+
+    /*
+       Nếu chỉ nhập đường dẫn
+       thì không tự chuyển thành
+       đường dẫn trên web của mình.
+
+       Trả về rỗng để tránh 404.
+    */
+
+    return "";
 
 }
 
@@ -285,9 +348,11 @@ function getTags(character) {
             "categories"
         );
 
+
     if (!value) {
         return [];
     }
+
 
     return value
         .split(",")
@@ -309,6 +374,7 @@ function createCategories() {
     const allTags =
         new Set();
 
+
     characters.forEach(
         character => {
 
@@ -324,6 +390,7 @@ function createCategories() {
         }
     );
 
+
     categoryFilters.innerHTML = `
 
         <button
@@ -335,6 +402,7 @@ function createCategories() {
 
     `;
 
+
     allTags.forEach(
         tag => {
 
@@ -343,20 +411,25 @@ function createCategories() {
                     "button"
                 );
 
+
             button.className =
                 "category-button";
+
 
             button.dataset.category =
                 tag;
 
+
             button.textContent =
                 tag.toUpperCase();
+
 
             categoryFilters
                 .appendChild(button);
 
         }
     );
+
 
     categoryFilters
         .querySelectorAll(
@@ -380,12 +453,15 @@ function createCategories() {
                                     )
                             );
 
+
                         button.classList.add(
                             "active"
                         );
 
+
                         currentCategory =
                             button.dataset.category;
+
 
                         renderCharacters();
 
@@ -409,6 +485,7 @@ function getFilteredCharacters() {
             .trim()
             .toLowerCase();
 
+
     return characters.filter(
         character => {
 
@@ -416,20 +493,24 @@ function getFilteredCharacters() {
                 getName(character)
                     .toLowerCase();
 
+
             const description =
                 getDescription(character)
                     .toLowerCase();
+
 
             const tags =
                 getTags(character)
                     .join(" ")
                     .toLowerCase();
 
+
             const matchesSearch =
                 !keyword ||
                 name.includes(keyword) ||
                 description.includes(keyword) ||
                 tags.includes(keyword);
+
 
             const matchesCategory =
                 currentCategory === "all" ||
@@ -439,6 +520,7 @@ function getFilteredCharacters() {
                             tag.toLowerCase() ===
                             currentCategory.toLowerCase()
                     );
+
 
             return (
                 matchesSearch &&
@@ -460,8 +542,10 @@ function renderCharacters() {
     const filtered =
         getFilteredCharacters();
 
+
     characterCount.textContent =
         `${filtered.length} NHÂN VẬT`;
+
 
     if (filtered.length === 0) {
 
@@ -485,7 +569,9 @@ function renderCharacters() {
 
     }
 
+
     grid.innerHTML = "";
+
 
     filtered.forEach(
         character => {
@@ -494,6 +580,7 @@ function renderCharacters() {
                 createCharacterCard(
                     character
                 );
+
 
             grid.appendChild(card);
 
@@ -514,17 +601,22 @@ function createCharacterCard(character) {
             "article"
         );
 
+
     card.className =
         "character-card";
+
 
     const image =
         getImage(character);
 
+
     const name =
         getName(character);
 
+
     const description =
         getDescription(character);
+
 
     const tags =
         getTags(character);
@@ -605,6 +697,11 @@ function createCharacterCard(character) {
     `;
 
 
+    /*
+       Bấm card chỉ mở popup.
+       KHÔNG đi link.
+    */
+
     const openButton =
         card.querySelector(
             ".character-open"
@@ -629,7 +726,7 @@ function createCharacterCard(character) {
 
 
 /* ==================================================
-   CHARACTER MODAL
+   OPEN CHARACTER
 ================================================== */
 
 function openCharacter(character) {
@@ -637,17 +734,25 @@ function openCharacter(character) {
     const image =
         getImage(character);
 
+
     const name =
         getName(character);
+
 
     const description =
         getDescription(character);
 
+
     const tags =
         getTags(character);
 
-    const link =
+
+    const rawLink =
         getLink(character);
+
+
+    const link =
+        normalizeLink(rawLink);
 
 
     modalContent.innerHTML = `
@@ -708,20 +813,20 @@ function openCharacter(character) {
                 link
                     ? `
 
-                        <div class="character-link-box">
+                        <div class="character-link-area">
 
                             <a
                                 href="${escapeHTML(link)}"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                class="character-link-button"
+                                class="character-link-box"
                             >
 
-                                <span>
+                                <span class="character-link-title">
                                     LINK
                                 </span>
 
-                                <span class="link-arrow">
+                                <span class="character-link-arrow">
                                     →
                                 </span>
 
@@ -730,16 +835,8 @@ function openCharacter(character) {
                         </div>
 
                     `
-                    : `
+                    : ""
 
-                        <div class="character-no-link">
-
-                            Nhân vật này chưa có
-                            liên kết roleplay.
-
-                        </div>
-
-                    `
             }
 
         </div>
@@ -767,6 +864,7 @@ function closeCharacterModal() {
     modal.classList.remove(
         "show"
     );
+
 
     document.body.style.overflow =
         "";
