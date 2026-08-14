@@ -5,7 +5,7 @@
 
 
 /* ==================================================
-   GOOGLE SHEET TSV
+   GOOGLE SHEET
 ================================================== */
 
 const SHEET_URL =
@@ -59,26 +59,20 @@ async function loadCharacters() {
             await fetch(SHEET_URL);
 
         if (!response.ok) {
-
             throw new Error(
                 "Không thể kết nối Google Sheet."
             );
-
         }
-
 
         const text =
             await response.text();
 
-
         characters =
             parseTSV(text);
-
 
         createCategories();
 
         renderCharacters();
-
 
     } catch (error) {
 
@@ -86,7 +80,6 @@ async function loadCharacters() {
             "Lỗi tải Google Sheet:",
             error
         );
-
 
         grid.innerHTML = `
 
@@ -107,7 +100,6 @@ async function loadCharacters() {
             </div>
 
         `;
-
 
         characterCount.textContent =
             "KHÔNG CÓ DỮ LIỆU";
@@ -131,13 +123,9 @@ function parseTSV(text) {
                 row.split("\t")
             );
 
-
     if (rows.length < 2) {
-
         return [];
-
     }
-
 
     const headers =
         rows[0].map(
@@ -147,13 +135,11 @@ function parseTSV(text) {
                     .toLowerCase()
         );
 
-
     return rows
         .slice(1)
         .map(row => {
 
             const character = {};
-
 
             headers.forEach(
                 (header, index) => {
@@ -163,7 +149,6 @@ function parseTSV(text) {
 
                 }
             );
-
 
             return character;
 
@@ -203,7 +188,6 @@ function getValue(
         }
 
     }
-
 
     return "";
 
@@ -301,13 +285,9 @@ function getTags(character) {
             "categories"
         );
 
-
     if (!value) {
-
         return [];
-
     }
-
 
     return value
         .split(",")
@@ -329,7 +309,6 @@ function createCategories() {
     const allTags =
         new Set();
 
-
     characters.forEach(
         character => {
 
@@ -345,7 +324,6 @@ function createCategories() {
         }
     );
 
-
     categoryFilters.innerHTML = `
 
         <button
@@ -357,7 +335,6 @@ function createCategories() {
 
     `;
 
-
     allTags.forEach(
         tag => {
 
@@ -366,25 +343,20 @@ function createCategories() {
                     "button"
                 );
 
-
             button.className =
                 "category-button";
-
 
             button.dataset.category =
                 tag;
 
-
             button.textContent =
                 tag.toUpperCase();
-
 
             categoryFilters
                 .appendChild(button);
 
         }
     );
-
 
     categoryFilters
         .querySelectorAll(
@@ -408,15 +380,12 @@ function createCategories() {
                                     )
                             );
 
-
                         button.classList.add(
                             "active"
                         );
 
-
                         currentCategory =
                             button.dataset.category;
-
 
                         renderCharacters();
 
@@ -440,7 +409,6 @@ function getFilteredCharacters() {
             .trim()
             .toLowerCase();
 
-
     return characters.filter(
         character => {
 
@@ -448,24 +416,20 @@ function getFilteredCharacters() {
                 getName(character)
                     .toLowerCase();
 
-
             const description =
                 getDescription(character)
                     .toLowerCase();
-
 
             const tags =
                 getTags(character)
                     .join(" ")
                     .toLowerCase();
 
-
             const matchesSearch =
                 !keyword ||
                 name.includes(keyword) ||
                 description.includes(keyword) ||
                 tags.includes(keyword);
-
 
             const matchesCategory =
                 currentCategory === "all" ||
@@ -475,7 +439,6 @@ function getFilteredCharacters() {
                             tag.toLowerCase() ===
                             currentCategory.toLowerCase()
                     );
-
 
             return (
                 matchesSearch &&
@@ -489,7 +452,7 @@ function getFilteredCharacters() {
 
 
 /* ==================================================
-   RENDER CHARACTERS
+   RENDER
 ================================================== */
 
 function renderCharacters() {
@@ -497,10 +460,8 @@ function renderCharacters() {
     const filtered =
         getFilteredCharacters();
 
-
     characterCount.textContent =
         `${filtered.length} NHÂN VẬT`;
-
 
     if (filtered.length === 0) {
 
@@ -524,9 +485,7 @@ function renderCharacters() {
 
     }
 
-
     grid.innerHTML = "";
-
 
     filtered.forEach(
         character => {
@@ -535,7 +494,6 @@ function renderCharacters() {
                 createCharacterCard(
                     character
                 );
-
 
             grid.appendChild(card);
 
@@ -546,7 +504,7 @@ function renderCharacters() {
 
 
 /* ==================================================
-   CREATE CHARACTER CARD
+   CHARACTER CARD
 ================================================== */
 
 function createCharacterCard(character) {
@@ -556,22 +514,17 @@ function createCharacterCard(character) {
             "article"
         );
 
-
     card.className =
         "character-card";
-
 
     const image =
         getImage(character);
 
-
     const name =
         getName(character);
 
-
     const description =
         getDescription(character);
-
 
     const tags =
         getTags(character);
@@ -611,7 +564,9 @@ function createCharacterCard(character) {
                         .slice(0, 3)
                         .map(
                             tag =>
-                                `<span>${escapeHTML(tag)}</span>`
+                                `<span>
+                                    ${escapeHTML(tag)}
+                                </span>`
                         )
                         .join("")
                 }
@@ -650,12 +605,6 @@ function createCharacterCard(character) {
     `;
 
 
-    /* ==================================================
-       IMPORTANT:
-       BUTTON CHỈ MỞ MODAL
-       KHÔNG MỞ LINK
-    ================================================== */
-
     const openButton =
         card.querySelector(
             ".character-open"
@@ -680,7 +629,7 @@ function createCharacterCard(character) {
 
 
 /* ==================================================
-   OPEN CHARACTER MODAL
+   CHARACTER MODAL
 ================================================== */
 
 function openCharacter(character) {
@@ -688,18 +637,14 @@ function openCharacter(character) {
     const image =
         getImage(character);
 
-
     const name =
         getName(character);
-
 
     const description =
         getDescription(character);
 
-
     const tags =
         getTags(character);
-
 
     const link =
         getLink(character);
@@ -762,25 +707,38 @@ function openCharacter(character) {
             ${
                 link
                     ? `
-                        <div class="character-link-wrapper">
+
+                        <div class="character-link-box">
 
                             <a
                                 href="${escapeHTML(link)}"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                class="character-open character-roleplay-link"
+                                class="character-link-button"
                             >
-                                DẠO CÙNG NHÂN VẬT
-                                <span>→</span>
+
+                                <span>
+                                    LINK
+                                </span>
+
+                                <span class="link-arrow">
+                                    →
+                                </span>
+
                             </a>
 
                         </div>
+
                     `
                     : `
+
                         <div class="character-no-link">
+
                             Nhân vật này chưa có
                             liên kết roleplay.
+
                         </div>
+
                     `
             }
 
@@ -809,7 +767,6 @@ function closeCharacterModal() {
     modal.classList.remove(
         "show"
     );
-
 
     document.body.style.overflow =
         "";
