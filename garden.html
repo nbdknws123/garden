@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Vườn Hoa Hồng — NOBODYKNOWS</title>
+
+    <link
+        rel="stylesheet"
+        href="./style.css"
+    >
+</head>
+
+
+<body class="garden-page">
+
+    <!-- =========================
+         HEADER
+    ========================== -->
+
+    <header class="garden-header">
+
+        <a
+            href="./index.html"
+            class="garden-brand"
+        >
+            <span class="brand-symbol">✦</span>
+
+            <span>
+                VƯỜN HOA HỒNG
+            </span>
+
+            <small>
+                NOBODYKNOWS
+            </small>
+        </a>
+
+
+        <a
+            href="./index.html"
+            class="back-home"
+        >
+            ← CỔNG VƯỜN
+        </a>
+
+    </header>
+
+
+    <!-- =========================
+         MAIN
+    ========================== -->
+
+    <main class="garden-container">
+
+
+        <!-- TITLE -->
+
+        <section class="garden-intro">
+
+            <p class="garden-eyebrow">
+                NOBODYKNOWS' CHARACTER ARCHIVE
+            </p>
+
+            <h1>
+                Những đóa hồng
+                <em>trong vườn</em>
+            </h1>
+
+            <p class="garden-subtitle">
+                Nơi lưu giữ những nhân vật đã được gieo xuống
+                khu vườn của NOBODYKNOWS.
+            </p>
+
+        </section>
+
+
+        <!-- =========================
+             SEARCH + FILTER
+        ========================== -->
+
+        <section class="garden-tools">
+
+            <div class="search-box">
+
+                <span>
+                    ⌕
+                </span>
+
+                <input
+                    id="searchInput"
+                    type="text"
+                    placeholder="Tìm kiếm nhân vật..."
+                    autocomplete="off"
+                >
+
+            </div>
+
+
+            <div
+                id="categoryFilters"
+                class="category-filters"
+            >
+
+                <button
+                    class="category-button active"
+                    data-category="all"
+                >
+                    TẤT CẢ
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             CHARACTER COUNT
+        ========================== -->
+
+        <div class="garden-result">
+
+            <span id="characterCount">
+                ĐANG TÌM KIẾM...
+            </span>
+
+        </div>
+
+
+        <!-- =========================
+             CHARACTER GRID
+        ========================== -->
+
+        <section
+            id="characterGrid"
+            class="character-grid"
+        >
+
+            <!--
+                CHARACTERS WILL BE LOADED
+                FROM GOOGLE SHEETS
+            -->
+
+            <div class="loading-card">
+
+                <div class="loading-symbol">
+                    ✦
+                </div>
+
+                <p>
+                    Đang mở cánh cổng khu vườn...
+                </p>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+    <!-- =========================
+         CHARACTER MODAL
+    ========================== -->
+
+    <div
+        id="characterModal"
+        class="character-modal"
+    >
+
+        <div class="modal-overlay"></div>
+
+
+        <div class="modal-box">
+
+            <button
+                id="closeModal"
+                class="modal-close"
+            >
+                ×
+            </button>
+
+
+            <div
+                id="modalContent"
+                class="modal-content"
+            >
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script src="./characters.js"></script>
+
+</body>
+
+</html>
