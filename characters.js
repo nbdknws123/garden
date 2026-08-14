@@ -9,7 +9,7 @@
 ================================================== */
 
 const SHEET_URL =
-    "https://docs.google.com/spreadsheets/d/e/2PACX-1vQAytUVKlMRa29kOXMn4Vuf_6SbncyBOB7km-mgFdtZkuQK-1DoSaC9jY-BMmo3nEtgjYXc1s2Akg7h/pub?output=tsv";
+    "https://docs.google.com/spreadsheets/d/e/2PACX-1vQXpDmp7Qq30OHx5sh_uxP5DNMP3T_UismBdx2tWNqnHM7s0y05LuqFzgP4wenO18iNNuoiKwtLBuLm/pub?output=tsv";
 
 
 /* ==================================================
@@ -123,7 +123,7 @@ function parseTSV(text) {
     const rows =
         text
             .trim()
-            .split("\n")
+            .split(/\r?\n/)
             .map(row =>
                 row.split("\t")
             );
@@ -656,17 +656,12 @@ function createCharacterCard(character) {
 
 
     /* ==================================================
-       BUTTON ACTION
+       OPEN CHARACTER
     ================================================== */
 
     openButton.addEventListener(
         "click",
         () => {
-
-            /*
-             * Nếu char có link:
-             * mở trang roleplay.
-             */
 
             if (link) {
 
@@ -680,11 +675,6 @@ function createCharacterCard(character) {
 
             }
 
-
-            /*
-             * Nếu char chưa có link:
-             * vẫn mở modal như cũ.
-             */
 
             openCharacter(
                 character
